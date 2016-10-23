@@ -1,9 +1,16 @@
 public class AppRunner {
 
-    final static String test = "maven task 1 started";
+    static Integer value = 3;
 
     public static void main(String ... args){
-        System.out.println(test);
+        AppRunner item = new AppRunner();
+        item.doSmth(value);
+        System.out.println(item);
+    }
+
+    public Integer doSmth(Integer number){
+        return ++number;
+
     }
 
 }

@@ -7,6 +7,9 @@
     <groupId>ua.rd</groupId>
     <artifactId>deniska</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>maven-task-2</name>
+    <url>http://maven.apache.org</url>
 
 
     <properties>
@@ -14,7 +17,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <main>AppRunner</main>
-        <arg>argument</arg>
+        <itest>ItestAppRunnerTest</itest>
+        <simple-test>SimpleAppRunnerTest</simple-test>
     </properties>
 
     <dependencies>
@@ -28,24 +32,81 @@
 
     <profiles>
         <profile>
-            <id>exec_runner</id>
+            <id>simple-test-only</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.5.0</version>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.19.1</version>
                         <executions>
                             <execution>
-                                <phase>package</phase>
+                                <phase>test</phase>
                                 <goals>
-                                    <goal>java</goal>
+                                    <goal>test</goal>
                                 </goals>
                             </execution>
                         </executions>
                         <configuration>
-                            <mainClass>${main}</mainClass>
-                            <commandlineArgs>${arg}</commandlineArgs>
+                            <excludes>
+                                <exclude>${simple-test}.*</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>itests</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.19.1</version>
+                        <executions>
+                            <execution>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <includes>
+                                <include>${itest}.*</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>double-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.19.1</version>
+                        <executions>
+                            <execution>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <includes>
+                                <include>${itest}.*</include>
+                                <include>${simple-test}.*</include>
+                            </includes>
                         </configuration>
                     </plugin>
                 </plugins>
